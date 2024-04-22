@@ -23,8 +23,8 @@
 
     $.getJSON( "Penguins/animationData.json", function( data ) {
         //sprites_to_draw[1].push( new Sprite(data, 0 ,0, "idleSpin") );
-        //sprites_to_draw[1].push( new Sprite(data, 100 ,100, "idleWave") );
-        sprites_to_draw[1].push( new Sprite(data, 150 ,600, "walk_E") );
+        sprites_to_draw[1].push( new Sprite(data, 100 ,100, "idleBreathing") );
+
 
     });
 
@@ -39,7 +39,64 @@
         };
         img.src = 'imgs/bk.jpg';
         draw_loop_timeout = setInterval(draw_loop, 33);
+
+        //movement
+        $(document).on("keydown", function (e){
+        console.log(e.keyCode);
+            //up
+            if(e.keyCode == 38){
+                sprites_to_draw[1][0].set_y_v(-5);
+                sprites_to_draw[1][0].set_anim_state("walk_N");
+            }
+            //down
+            if(e.keyCode == 40){
+                sprites_to_draw[1][0].set_y_v(5);
+                sprites_to_draw[1][0].set_anim_state("walk_S");
+            }
+            //left
+            if(e.keyCode == 37){
+                sprites_to_draw[1][0].set_x_v(-5);
+                sprites_to_draw[1][0].set_anim_state("walk_W");
+            }
+            //right
+            if(e.keyCode == 39){
+                console.log('bang');
+                sprites_to_draw[1][0].set_x_v(5);
+                sprites_to_draw[1][0].set_anim_state("walk_E");
+            }
+
+
+        });
+
+        $(document).on("keyup", function (e){
+            //up
+            if(e.keyCode == 38){
+
+                sprites_to_draw[1][0].set_y_v(0);
+                sprites_to_draw[1][0].set_idle_state();
+            }
+            //down
+            if(e.keyCode == 40){
+
+                sprites_to_draw[1][0].set_y_v(0);
+                sprites_to_draw[1][0].set_idle_state();
+            }
+            //left
+            if(e.keyCode == 37){
+
+                sprites_to_draw[1][0].set_x_v(0);
+                sprites_to_draw[1][0].set_idle_state();
+            }
+            //right
+            if(e.keyCode == 39){
+                sprites_to_draw[1][0].set_x_v(0);
+                sprites_to_draw[1][0].set_idle_state();
+            }
+
+
+        });
     });
+
 
     window.addEventListener('resize', resize);
 
@@ -49,8 +106,8 @@
         var forground_length  = sprites_to_draw[1].length;
         var has_background_changed = false;
 
-        const context = canvas.getContext('2d');
-        //context.clearRect(0, 0, canvas.width, canvas.height);
+        let backgroundImage = new Image();
+
 
         //Draw background sprites
         for(var i = 0; i < background_length; i++){

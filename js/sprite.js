@@ -1,4 +1,4 @@
-//Parent Sprit Classa
+//Parent Sprite Class
 class Sprite {
     constructor(sprite_json, x, y, start_state){
         this.sprite_json = sprite_json;
@@ -11,17 +11,17 @@ class Sprite {
 
         this.cur_bk_data = null;
 
-        this.x_v = 10;
+        this.x_v = 0;
         this.y_v = 0;
     }
 
     draw(state){
         var ctx = canvas.getContext('2d');
         //console.log(this.sprite_json[this.root_e][this.state][this.cur_frame]['w']);
-        console.log(state['key_change']);
+        //console.log(state['key_change']);
 
         if(this.sprite_json[this.root_e][this.state][this.cur_frame]['img'] == null){
-            console.log("loading");
+            //console.log("loading");
             this.sprite_json[this.root_e][this.state][this.cur_frame]['img'] = new Image();
             this.sprite_json[this.root_e][this.state][this.cur_frame]['img'].src = 'Penguins/' + this.root_e + '/' + this.state + '/' + this.cur_frame + '.png';
         }
@@ -39,7 +39,7 @@ class Sprite {
 
         this.cur_frame = this.cur_frame + 1;
         if(this.cur_frame >= this.sprite_json[this.root_e][this.state].length){
-            console.log(this.cur_frame);
+            //console.log(this.cur_frame);
             this.cur_frame = 0;
         }
 
@@ -66,13 +66,51 @@ class Sprite {
         const idle_state = ["idleBreathing", "idleLookAround"];
 
         const random = Math.floor(Math.random() * idle_state.length);
-        console.log(idle_state[random]);
+        //console.log(idle_state[random]);
         this.state = idle_state[random];
     }
 
     bound_hit(side){
-            this.set_idle_state();
-   } 
+            if (side == "N") {
+                this.y = 100;
+                this.redraw_bk();
+            }
+            else if (side == "S") {
+                this.y = this.y - 100;
+                this.redraw_bk();
+            }
+            else if (side == "W") {
+                this.x = 100;
+                this.redraw_bk();
+            }
+            else if (side == "E") {
+                this.x = this.x - 100;
+                this.redraw_bk();
+            }
+   }
+
+    //redraw for when it goes out of bounds
+    redraw_bk(){
+    const context = canvas.getContext('2d');
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        img.onload = function() {
+
+            context.drawImage(img, 0, 0, canvas.width, canvas.height);
+        };
+        img.src = 'imgs/bk.jpg';
+    }
+
+   set_x_v(x){
+        this.x_v = x;
+   }
+
+   set_y_v(y){
+        this.y_v = y;
+   }
+
+   set_anim_state(anim){
+        this.state = anim;
+   }
 
 
 }
